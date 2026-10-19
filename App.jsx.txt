@@ -1,0 +1,64 @@
+import React, { useState } from 'react';
+
+const STAGES = [
+  "1. Introduction", "2. Opener", "3. Problem Discovery", "4. Value Proposition",
+  "5. Handling Objections", "6. Qualifying", "7. Closing", "8. Wrap-up"
+];
+
+export default function App() {
+  const [currentStage, setCurrentStage] = useState(0);
+  const [notes, setNotes] = useState('');
+  const [callStatus, setCallStatus] = useState('In Call');
+
+  return (
+    <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '800px', margin: 'auto' }}>
+      <h2>📞 Cold Call Guidance Assistant</h2>
+      <p>Status: <strong>{callStatus}</strong></p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginBottom: '20px' }}>
+        {STAGES.map((stage, idx) => (
+          <div 
+            key={idx} 
+            style={{
+              padding: '10px',
+              backgroundColor: idx === currentStage ? '#0070f3' : '#e0e0e0',
+              color: idx === currentStage ? '#ffffff' : '#000000',
+              borderRadius: '5px',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+            onClick={() => setCurrentStage(idx)}
+          >
+            {stage}
+          </div>
+        ))}
+      </div>
+
+      <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', background: '#f9f9f9' }}>
+        <h3>Current Stage: {STAGES[currentStage]}</h3>
+        <p><em>Guidance: Take live response notes from the transcript here.</em></p>
+        
+        <textarea 
+          rows="6" 
+          style={{ width: '100%', padding: '10px', borderRadius: '5px' }}
+          placeholder="Type live call notes here..."
+          value={notes} 
+          onChange={(e) => setNotes(e.target.value)} 
+        />
+        <br/><br/>
+
+        <button onClick={() => setCurrentStage(prev => Math.max(0, prev - 1))} disabled={currentStage === 0}>Previous</button>
+        <button onClick={() => setCurrentStage(prev => Math.min(STAGES.length - 1, prev + 1))} disabled={currentStage === STAGES.length - 1} style={{ marginLeft: '10px' }}>Next</button>
+        
+        <hr style={{ margin: '20px 0' }} />
+
+        <div>
+          <h4>Close Call</h4>
+          <button onClick={() => setCallStatus('Closed: Converted')} style={{ backgroundColor: 'green', color: '#fff', padding: '8px 15px', border: 'none', borderRadius: '4px', marginRight: '10px' }}>Convert</button>
+          <button onClick={() => setCallStatus('Closed: Rejected')} style={{ backgroundColor: 'red', color: '#fff', padding: '8px 15px', border: 'none', borderRadius: '4px' }}>Reject</button>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,25 @@
+CREATE TABLE IF NOT EXISTS calls (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    prospect_name VARCHAR(255) DEFAULT 'Prospect',
+    current_stage INT DEFAULT 1,
+    call_status VARCHAR(50) DEFAULT 'in-progress',
+    transcript_notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS stages (
+    stage_number INT PRIMARY KEY,
+    stage_title VARCHAR(255) NOT NULL,
+    guidance_notes TEXT NOT NULL
+);
+
+INSERT INTO stages (stage_number, stage_title, guidance_notes) VALUES
+(1, 'Introduction', 'Acknowledge time, introduce self, confirm prospect identity.'),
+(2, 'Opener', 'Build rapport, state the purpose of the call briefly.'),
+(3, 'Problem Discovery', 'Ask open-ended questions about current challenges.'),
+(4, 'Value Proposition', 'Align solution to the identified problems.'),
+(5, 'Handling Objections', 'Address pushback calmly with pre-defined battlecards.'),
+(6, 'Qualifying', 'Confirm budget, authority, need, and timeline (BANT).'),
+(7, 'Closing / Next Steps', 'Lock in meeting date/time or define immediate follow-up.'),
+(8, 'Call Wrap-up', 'Thank prospect, confirm key summary points, end call.')
+ON CONFLICT (stage_number) DO NOTHING;
